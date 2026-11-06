@@ -1,0 +1,8 @@
+node_modules/
+.env
+*.log
+backups/
+# O HTML antigo tem CPFs, chaves PIX e salários: não suba para nenhum repositório.
+legado/*.html
+.env.backup-*
+.env.local-backup

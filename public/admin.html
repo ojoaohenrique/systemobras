@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Administração · Gestão de Obra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@500;600&display=swap">
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+<div class="pg">
+  <div class="topo"><h1>Administração</h1><a href="/">← Voltar ao sistema</a></div>
+
+  <div class="box">
+    <h2 style="margin-top:0">Usuários</h2>
+    <p class="mut"><b>admin</b>: tudo, inclusive esta tela · <b>financeiro</b>: vê e edita tudo, inclusive folha, CPF, PIX e salários · <b>engenharia</b>: edita borderô e equipamentos; vê a folha sem dados pessoais · <b>leitura</b>: só consulta, sem dados pessoais nem de pagamento.</p>
+    <table><thead><tr><th>Nome</th><th>E-mail</th><th>Perfil</th><th>Ativo</th><th>Último acesso</th><th></th></tr></thead><tbody id="us"></tbody></table>
+    <h2>Novo usuário</h2>
+    <form class="row" id="nu">
+      <div><label>Nome</label><input id="nn" required></div>
+      <div><label>E-mail</label><input id="ne" type="email" required></div>
+      <div><label>Perfil</label><select id="np"><option>engenharia</option><option>financeiro</option><option>leitura</option><option>admin</option></select></div>
+      <div><label>Senha inicial</label><input id="ns" minlength="8" required placeholder="mín. 8 caracteres"></div>
+      <button class="b p">Criar</button>
+    </form>
+    <p class="msg" id="um"></p>
+  </div>
+
+  <div class="box">
+    <h2 style="margin-top:0">Trazer os dados do arquivo antigo</h2>
+    <p class="mut">Os lançamentos feitos no arquivo HTML antigo ficaram salvos só no navegador de quem usou. Para trazer esses dados para cá, no computador onde o arquivo foi usado:</p>
+    <ol class="mut">
+      <li>Abra o arquivo <code>gestao-de-obra-bordero.html</code> antigo no mesmo navegador de sempre.</li>
+      <li>Aperte <code>F12</code>, clique na aba <b>Console</b>, cole a linha abaixo e aperte Enter. O conteúdo vai para a área de transferência.</li>
+      <li>Volte aqui, cole no campo e clique em Importar.</li>
+    </ol>
+    <p><code id="cmd">copy(JSON.stringify({rows:JSON.parse(localStorage.getItem("bordero_v2")),areas:JSON.parse(localStorage.getItem("bordero_v2ar")||"null")}))</code></p>
+    <textarea id="lg" placeholder='Cole aqui o conteúdo copiado (começa com {"rows":[...'></textarea>
+    <div class="row" style="margin-top:10px">
+      <div><label>Como importar</label><select id="lm">
+        <option value="adicionar">Adicionar só os lançamentos que ainda não existem (recomendado)</option>
+        <option value="substituir">Apagar todos os lançamentos atuais e usar só os do arquivo</option>
+      </select></div>
+      <button class="b p" id="li">Importar</button>
+    </div>
+    <p class="msg" id="lmsg"></p>
+  </div>
+
+  <div class="box">
+    <h2 style="margin-top:0">Histórico de alterações</h2>
+    <p class="mut">Últimas 200 ações: quem fez, o quê e quando.</p>
+    <table><thead><tr><th>Quando</th><th>Usuário</th><th>Ação</th><th>Detalhe</th></tr></thead><tbody id="au"></tbody></table>
+  </div>
+</div>
+<script src="/js/admin.js"></script>
+</body>
+</html>

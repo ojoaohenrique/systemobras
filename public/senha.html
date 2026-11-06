@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trocar senha · Gestão de Obra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@500;600&display=swap">
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+<div class="hero">
+  <form class="card" id="f">
+    <img src="/img/logo.png" alt="Pró Vasconcelos – Lotes e Condomínios">
+    <h1>Trocar senha</h1>
+    <p class="mut">As outras sessões abertas com seu usuário serão encerradas.</p>
+    <label for="atual">Senha atual</label>
+    <input id="atual" type="password" autocomplete="current-password" required>
+    <label for="nova">Nova senha (mínimo 8 caracteres)</label>
+    <input id="nova" type="password" autocomplete="new-password" minlength="8" required>
+    <label for="nova2">Repita a nova senha</label>
+    <input id="nova2" type="password" autocomplete="new-password" minlength="8" required>
+    <button class="b p full">Salvar nova senha</button>
+    <p class="msg" id="msg"></p>
+    <p class="mut" style="margin-top:14px"><a href="/">Voltar ao sistema</a></p>
+  </form>
+</div>
+<script src="/js/senha.js"></script>
+</body>
+</html>
