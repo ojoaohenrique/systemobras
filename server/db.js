@@ -4,14 +4,16 @@ const { Pool, types } = require("pg");
 // NUMERIC volta como número JS (valores em reais cabem com folga em double)
 types.setTypeParser(1700, (v) => (v === null ? null : parseFloat(v)));
 
+const SEM_BANCO = "DATABASE_URL não configurada. No computador: arquivo .env. Na Vercel: Settings > Environment Variables, depois Redeploy.";
 if (!process.env.DATABASE_URL) {
-  console.error("Defina DATABASE_URL no arquivo .env (veja .env.example).");
-  process.exit(1);
+  console.error(SEM_BANCO);
+  // No terminal, para na hora; na Vercel, segue de pé e explica o erro em cada chamada da API
+  if (!process.env.VERCEL) process.exit(1);
 }
 
 // Bancos na nuvem (Supabase, Neon, Render...) exigem conexão criptografada.
 // Liga sozinho quando o banco não é local; DATABASE_SSL=0 ou 1 força.
-const url = process.env.DATABASE_URL.replace(/[?&]sslmode=[^&]*/g, "");
+const url = (process.env.DATABASE_URL || "postgres://nao-configurado@localhost/x").replace(/[?&]sslmode=[^&]*/g, "");
 const local = /@(localhost|127\.0\.0\.1)(:|\/)/.test(url);
 const ssl = process.env.DATABASE_SSL ? process.env.DATABASE_SSL === "1" : !local;
 const pool = new Pool({ connectionString: url, ssl: ssl ? { rejectUnauthorized: false } : false, max: process.env.VERCEL ? 3 : 5 });
@@ -41,4 +43,4 @@ function explicarErro(e) {
   return e.message || String(e);
 }
 
-module.exports = { explicarErro, pool, tx, q: (t, p) => pool.query(t, p) };
+module.exports = { SEM_BANCO, explicarErro, pool, tx, q: (t, p) => pool.query(t, p) };

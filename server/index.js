@@ -48,6 +48,17 @@ const limitarLogin = rateLimit({
   legacyHeaders: false,
   message: { erro: "Muitas tentativas de login. Espere 15 minutos." },
 });
+// Diagnóstico rápido: mostra se o servidor está de pé e alcança o banco (sem expor dados)
+app.get("/api/saude", async (_req, res) => {
+  const { pool, SEM_BANCO, explicarErro } = require("./db");
+  if (!process.env.DATABASE_URL) return res.status(500).json({ ok: false, banco: SEM_BANCO });
+  try {
+    await pool.query("SELECT 1");
+    res.json({ ok: true, banco: "conectado" });
+  } catch (e) {
+    res.status(500).json({ ok: false, banco: explicarErro(e) });
+  }
+});
 auth.rotas(app, limitarLogin);
 app.use("/api", require("./routes/dados"));
 app.use("/api", require("./routes/usuarios"));
@@ -57,7 +68,9 @@ app.use(express.static(path.join(__dirname, "..", "public"), { extensions: ["htm
 
 app.use((err, _req, res, _next) => {
   console.error(err);
-  res.status(500).json({ erro: "Erro interno no servidor." });
+  const { SEM_BANCO, explicarErro } = require("./db");
+  const msg = !process.env.DATABASE_URL ? SEM_BANCO : err.code || (err.errors && err.errors.length) ? explicarErro(err) : "Erro interno no servidor.";
+  res.status(500).json({ erro: msg });
 });
 
 // Na Vercel o app é exportado e vira uma função; no computador ou no Render, sobe na porta.
