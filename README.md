@@ -107,6 +107,19 @@ Funciona em qualquer hospedagem com Node.js e PostgreSQL (VPS com Nginx/Caddy, R
   pg_dump "$DATABASE_URL" -Fc -f backups/obras-$(date +%F).dump
   ```
 
+### Vercel
+
+O projeto já está pronto para a Vercel (`index.js` na raiz e `vercel.json`).
+
+1. Em vercel.com/new, importe o repositório do GitHub. Não precisa configurar build.
+2. Em **Settings → Environment Variables**, adicione:
+   - `DATABASE_URL`: a connection string do Supabase **no modo Transaction pooler (porta 6543)**, que é o indicado para servidores "serverless" como a Vercel;
+   - `COOKIE_SECURE` = `1`
+   - `TRUST_PROXY` = `1`
+3. Faça o deploy. As telas (`public/`) são servidas pela CDN da Vercel e a API roda como função.
+
+Na Vercel, o limite de tentativas de login vale por instância, então fica um pouco menos rígido que num servidor único.
+
 ## Comandos
 
 | Comando | O que faz |

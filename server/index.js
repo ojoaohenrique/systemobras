@@ -60,5 +60,10 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ erro: "Erro interno no servidor." });
 });
 
-const port = Number(process.env.PORT || 3000);
-app.listen(port, () => console.log(`Gestão de Obra rodando em http://localhost:${port}`));
+// Na Vercel o app é exportado e vira uma função; no computador ou no Render, sobe na porta.
+if (!process.env.VERCEL) {
+  const port = Number(process.env.PORT || 3000);
+  app.listen(port, () => console.log(`Gestão de Obra rodando em http://localhost:${port}`));
+}
+
+module.exports = app;

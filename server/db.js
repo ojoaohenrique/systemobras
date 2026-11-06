@@ -14,7 +14,7 @@ if (!process.env.DATABASE_URL) {
 const url = process.env.DATABASE_URL.replace(/[?&]sslmode=[^&]*/g, "");
 const local = /@(localhost|127\.0\.0\.1)(:|\/)/.test(url);
 const ssl = process.env.DATABASE_SSL ? process.env.DATABASE_SSL === "1" : !local;
-const pool = new Pool({ connectionString: url, ssl: ssl ? { rejectUnauthorized: false } : false, max: 5 });
+const pool = new Pool({ connectionString: url, ssl: ssl ? { rejectUnauthorized: false } : false, max: process.env.VERCEL ? 3 : 5 });
 
 async function tx(fn) {
   const c = await pool.connect();
